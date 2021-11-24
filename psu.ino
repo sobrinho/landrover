@@ -13,8 +13,9 @@ const byte STATE_BOOTING = 1;
 const byte STATE_ON = 2;
 const byte STATE_SHUTTING_DOWN = 3;
 
-const unsigned long BOOT_TIMEOUT = 5 * 60 * 1000;
-const unsigned long SHUT_DOWN_TIMEOUT = 5 * 60 * 1000;
+const unsigned long BOOT_TIMEOUT = 1 * 60 * 1000;
+const unsigned long SHUT_DOWN_DELAY = 5 * 60 * 1000;
+const unsigned long SHUT_DOWN_TIMEOUT = 1 * 60 * 1000;
 
 volatile boolean ignition = false;
 volatile boolean feedback = false;
@@ -56,12 +57,12 @@ void loop() {
     case STATE_BOOTING:
       unsigned long bootingSince = millis();
 
-      while (millis() - bootingSince < BOOT_TIMEOUT) {
+      do {
         if (feedback) {
           currentState = STATE_ON;
           return;
         }
-      }
+      } while (millis() - bootingSince < BOOT_TIMEOUT);
 
       digitalWrite(PIN_RELAY, LOW);
       digitalWrite(PIN_POWER, LOW);
@@ -70,19 +71,28 @@ void loop() {
       break;
 
     case STATE_ON:
-      if (!ignition) {
-        digitalWrite(PIN_POWER, LOW);
-        currentState = STATE_SHUTTING_DOWN;
-      }
+      unsigned long ignitionOffSince = millis();
+
+      do {
+        if (ignition) {
+          return;
+        }
+      } while (millis() - ignitionOffSince < SHUT_DOWN_DELAY);
+
+      digitalWrite(PIN_POWER, LOW);
+      currentState = STATE_SHUTTING_DOWN;
 
       break;
 
     case STATE_SHUTTING_DOWN:
-      unsigned long safeShutDownSince = millis();
+      unsigned long shuttingDownSince = millis();
 
-      while (feedback && millis() - safeShutDownSince < BOOT_TIMEOUT) {
-        ;
-      }
+      do {
+        if (!feedback) {
+          currentState = STATE_OFF;
+          return;
+        }
+      } while (millis() - shuttingDownSince < SHUT_DOWN_TIMEOUT);
 
       digitalWrite(PIN_RELAY, LOW);
       currentState = STATE_OFF;
