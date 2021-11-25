@@ -32,11 +32,11 @@ void setup() {
 }
 
 void readIgnition() {
-  ignition = digitalRead(PIN_IGNITION) == LOW;
+  ignition = !ignition;
 }
 
 void readFeedback() {
-  feedback = digitalRead(PIN_FEEDBACK) == LOW;
+  feedback = !feedback;
 }
 
 void loop() {
