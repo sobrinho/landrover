@@ -6,8 +6,8 @@ Here's the list of needed components:
 
 1. [Faatech FT-VR-LR12](https://www.faaftech.com/produtos/interface-de-video/ft-video-free-lr12/) or a similar video interface to have an RCA input
 2. Android Box of any kind
-  1. [Aquário STV-200](https://aquario.com.br/produto/smart-tv-box-4k/)
-	2. [Mi Box S](https://www.mi.com/br/mi-box-s/)
+   1. [Aquário STV-200](https://aquario.com.br/produto/smart-tv-box-4k/)
+   2. [Mi Box S](https://www.mi.com/br/mi-box-s/)
 3. [Carlinkit USB Dongle](https://www.carlinkit.com/carplay-usb-dongle-for-android-head-unit.html)
 4. Arduino Pro Micro, or similar, to emulate the touch screen
 
