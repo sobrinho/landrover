@@ -22,7 +22,7 @@ Here's the list of needed components:
 
 ## Faaftech FT-VR-LR12
 
-This interface allows you to connect any audio/video source (RCA) to your factory screen.
+[This interface](https://www.faaftech.com/produtos/interface-de-video/ft-video-free-lr12/) allows you to connect any audio/video source (RCA) to your factory screen.
 
 It also translates the touch screen to serial which we can use to drive the Arduino avoiding the need of an external keyboard/rotary device.
 
