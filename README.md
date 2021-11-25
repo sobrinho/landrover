@@ -9,7 +9,7 @@ Here's the list of needed components:
    1. HW-638
    2. XL4005
    3. CPT-UL-1
-   4. Or any converter capable of supplying form 3A to 5A
+   4. Or any converter capable of supplying from 3A to 5A
 3. Android Box of any kind
    1. [Aquário STV-200](https://aquario.com.br/produto/smart-tv-box-4k/)
    2. [Mi Box S](https://www.mi.com/br/mi-box-s/)
