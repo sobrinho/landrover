@@ -6,7 +6,7 @@ const byte PIN_IGNITION = 0;
 const byte PIN_RELAY = 1;
 const byte PIN_POWER = 2;
 const byte PIN_FEEDBACK = 3;
-const byte PIN_NC1 = 4;
+const byte PIN_LED = 4;
 
 const byte STATE_OFF = 0;
 const byte STATE_BOOTING = 1;
@@ -25,7 +25,7 @@ void setup() {
   pinMode(PIN_RELAY, OUTPUT);
   pinMode(PIN_POWER, OUTPUT);
   pinMode(PIN_FEEDBACK, INPUT_PULLUP);
-  pinMode(PIN_NC1, INPUT_PULLUP);
+  pinMode(PIN_LED, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(PIN_IGNITION), readIgnition, CHANGE);
   attachInterrupt(digitalPinToInterrupt(PIN_FEEDBACK), readFeedback, CHANGE);
@@ -49,6 +49,7 @@ void loop() {
       if (ignition) {
         digitalWrite(PIN_RELAY, HIGH);
         digitalWrite(PIN_POWER, HIGH);
+        digitalWrite(PIN_LED, HIGH);
         currentState = STATE_BOOTING;
       }
 
@@ -66,6 +67,7 @@ void loop() {
 
       digitalWrite(PIN_RELAY, LOW);
       digitalWrite(PIN_POWER, LOW);
+      digitalWrite(PIN_LED, LOW);
       currentState = STATE_OFF;
 
       break;
@@ -95,6 +97,7 @@ void loop() {
       } while (millis() - shuttingDownSince < SHUT_DOWN_TIMEOUT);
 
       digitalWrite(PIN_RELAY, LOW);
+      digitalWrite(PIN_LED, LOW);
       currentState = STATE_OFF;
 
       break;
