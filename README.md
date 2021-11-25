@@ -19,6 +19,7 @@ Here's the list of needed components:
    6. Generic Linux devices are still pending of testing with [Go Carplay](https://github.com/mzyy94/gocarplay)
 4. [Carlinkit USB Dongle](https://www.carlinkit.com/carplay-usb-dongle-for-android-head-unit.html)
 5. Arduino Pro Micro, or similar, to emulate the touch screen
+6. PSU in the case of Raspberry PI or Radxa Zero
 
 ## Faaftech FT-VR-LR12
 
@@ -93,3 +94,29 @@ You need to connect the Faaftech Touch Data wire to the RX1 on the Arduino board
 If you picked the Mi Box S, another option is to use an ESP8266 with the [esp8266-touch.ino](/esp8266-touch.ino) to use Bluetooth and avoid the USB Hub Device.
 
 _If you choose the ESP8266, you need to solder a couple of wires to supply power to the ESP8266._
+
+## PSU
+
+If you are using an Android/Linux Device that can corrupt with forced shutdown, you need a PSU (Power Supply Unit) to trigger a safe shutdown when you turn off the ignition.
+
+Not tested yet but I prototyped a [PSU sofware](/psu.ino) to run in an ATtiny85 to trigger the safe shutdown, forced shutdown and recover from failures.
+
+This is yet to be tested but so far:
+
+1. Connect the IGNITION signal to the PIN 0 (using an optocoupler)
+2. Connect the Buck Converter to a Relay connected to the PIN 1 (using an optocoupler)
+3. Connect the Rapsberry/Radxa Zero safe shutdown pin to the ATtiny85 PIN 2
+4. Connect the 3.3v pin back to the ATtiny85 PIN 3
+5. Connect an LED to the PIN 4 with an appropriated resistor
+
+This software isn't tested by myself yet, it's just a prototype, keep this on mind before actually running it.
+
+You will need a software in your device to read the power pin (ATtiny85 PIN 2) and trigger a safe shutdown.
+
+After you shutdown the ignition, the PSU will wait until SHUT_DOWN_DELAY before triggering the safe shutdown.
+
+If the device doesn't shutdown in SHUT_DOWN_TIMEOUT, the energy will be cut-off (to recover from shutdown failures and drain the car battery).
+
+If the device doesn't boot in BOOT_TIMEOUT, the energy wil be cut-off and triggered again (to recover from boot failures).
+
+_PS: Schematics to be designed, software to be reviewed and documentation also to be reviewed._
