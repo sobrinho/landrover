@@ -13,7 +13,7 @@ Here's the list of needed components:
 
 Raspberry PI and Radxa Zero with LineageOS are still pending of testing.
 
-Linux devices are still pending of testing with [Go Carplay](https://github.com/mzyy94/gocarplay).
+Other Linux devices, even Raspberry PI and Radxa Zero, are still pending of testing with [Go Carplay](https://github.com/mzyy94/gocarplay).
 
 ## Faaftech FT-VR-LR12
 
