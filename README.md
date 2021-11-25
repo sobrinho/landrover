@@ -81,3 +81,15 @@ It connects to your phone, wired or wirelessly, and provides a video output thro
 This is a perfect fit for Android devices since the dongle will do all the job and will output a video stream.
 
 _You can also use a WinCE device but they aren't popular anymore._
+
+## Arduino Pro Micro (Touch Screen)
+
+To send the touch screen data to the Android device, we need to parse the Faaftech touch data and emulate a HID device.
+
+We can do this using an Arduino connected to the Faaftech serial output and the Android's USB with an Arduino Pro Micro.
+
+You need to connect the Faaftech Touch Data wire to the RX1 on the Arduino board and use the [arduino-touch.ino](/arduino-touch.ino) software.
+
+If you picked the Mi Box S, another option is to use an ESP8266 with the [esp8266-touch.ino](/esp8266-touch.ino) to use Bluetooth and avoid the USB Hub Device.
+
+_If you choose the ESP8266, you need to solder a couple of wires to supply power to the ESP8266._
