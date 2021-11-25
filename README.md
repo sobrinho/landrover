@@ -21,17 +21,41 @@ This interface allows you to connect any audio/video source (RCA) to your factor
 
 It also captures the touch screen which we can use to drive the Android avoiding the need of an external keyboard/rotary device.
 
-## Aquário STV-200
+## Android Box
+
+Any Android Box will be capable of running Carlinkit Android App as long you can install their APK.
+
+If you are using a standard Android Box, you just need to download and install the APK.
+
+If you are using an Android TV Box, you need to download a file browser to install the APK, which is less convenient but not a big effort either.
+
+### Aquário STV-200
 
 This is the cheapest option and there are a lot of similar devices like the MXQ Pro 4k which are all the same under the hood.
 
-If you don't care too much about performance, this is the way to go.
+If you don't care too much about performance, this is the way to go, install the APK and you are good to go.
 
-## Mi Box S
+Although, keep in mind:
 
-This is the best option in terms of performance.
+1. Every time you plug your phone, a popup to allow the USB device will popup but the Carlinkit app will close it after a couple of seconds and will start the CarPlay (cosmetic issue)
+2. You will need to connect the audio from your iPhone to the car through Bluetooth, which is not an issue per see but:
+   1. Sound will go through from your iPhone to the car using Bluetooth, e.g.: Spotify, Apple Music, Siri, iMessage, WhatsApp, Telegram, etc
+   2. Navigation apps like Apple Maps/Waze/Google Maps/Tom Tom won't be able to use the Bluetooth connection
+   3. You can't use the AUX connection either because of the background audio noise from Faaftech
+   4. You can workaround this by using an external speaker connected to the STV-200 just for navigation apps
+3. While it has an AV output, the image seems to be better using an HDMI2AV converter (your mileage may vary)
 
-Although, it runs Android TV which requires a bit more effort to run standard Android apps.
+Still pending to test custom ROMs like the [Aidan's ROM](https://www.aidansrom.ml) to see if it improves the performance.
+
+### Mi Box S
+
+This is the best option in terms of performance but the drawbacks are:
+
+1. Mi Box S runs Android TV which requires a bit more effort to run standard Android apps
+2. It has only one USB port, requiring an USB Hub to be able to connect the dongle and the touch screen device (Arduino) at the same time
+   1. You can't use a cheap USB Hub since they aren't capable of providing enough power to the dongle
+   2. I'm currently using an Orico (from Aliexpress) with success
+3. Also, you will need an external HDMI2AV converter since it doesn't have an AV output
 
 ## Carlinkit USB Dongle
 
