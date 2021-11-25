@@ -1,6 +1,6 @@
 # Land Rover CarPlay
 
-This is a project to run an usable CarPlay in a Freelander 2 and possible Range Rover Evoque and Range Rover Discovery Sport since they share the same Bosch multimedia.
+This is a project to run an usable CarPlay in a Land Rover Freelander 2 HSE 2013+ and possible Range Rover Evoque and Range Rover Discovery Sport since they share the same Bosch multimedia in some versions.
 
 Here's the list of needed components:
 
