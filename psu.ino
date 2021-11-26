@@ -72,8 +72,8 @@ void loop() {
       break;
 
     case STATE_ON:
-      while (ignition) {
-        ;
+      if (ignition) {
+        return;
       }
 
       ignitionOffSince = millis();
