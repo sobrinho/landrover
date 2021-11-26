@@ -29,14 +29,17 @@ void setup() {
 
   attachInterrupt(digitalPinToInterrupt(PIN_IGNITION), readIgnition, CHANGE);
   attachInterrupt(digitalPinToInterrupt(PIN_FEEDBACK), readFeedback, CHANGE);
+
+  readIgnition();
+  readFeedback();
 }
 
 void readIgnition() {
-  ignition = !ignition;
+  ignition = digitalRead(PIN_IGNITION) == LOW;
 }
 
 void readFeedback() {
-  feedback = !feedback;
+  feedback = digitalRead(PIN_FEEDBACK) == LOW;
 }
 
 void loop() {
