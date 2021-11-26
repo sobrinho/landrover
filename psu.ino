@@ -13,9 +13,9 @@ const byte STATE_BOOTING = 1;
 const byte STATE_ON = 2;
 const byte STATE_SHUTTING_DOWN = 3;
 
-const unsigned long BOOT_TIMEOUT = 1 * 60 * 1000;
-const unsigned long SHUT_DOWN_DELAY = 5 * 60 * 1000;
-const unsigned long SHUT_DOWN_TIMEOUT = 1 * 60 * 1000;
+const unsigned long BOOT_TIMEOUT = 60000;
+const unsigned long SHUT_DOWN_DELAY = 60000;
+const unsigned long SHUT_DOWN_TIMEOUT = 60000;
 
 volatile boolean ignition = false;
 volatile boolean feedback = false;
