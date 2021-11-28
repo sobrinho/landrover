@@ -6,27 +6,23 @@ class Psu {
     byte pinRelay;
     byte pinPower;
     byte pinFeedback;
-    volatile bool ignitionSensor;
-    volatile bool feedbackSensor;
 
-    void readIgnition() {
-      this->ignitionSensor = digitalRead(this->pinIgnition) == LOW;
+    PsuState currentState;
+
+    bool readIgnition() {
+      return digitalRead(this->pinIgnition) == LOW;
     }
 
-    void readFeedback() {
-      this->feedbackSensor = digitalRead(this->pinFeedback) == LOW;
+    bool readFeedback() {
+      return digitalRead(this->pinFeedback) == LOW;
     }
 
   public:
-    PsuState currentState;
-
     void Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback) {
       this->pinIgnition = pinIgnition;
       this->pinRelay = pinRelay;
       this->pinPower = pinPower;
       this->pinFeedback = pinFeedback;
-      this->ignitionSensor = false;
-      this->feedbackSensor = false;
       this->currentState = psuStateOff;
     }
 
@@ -35,12 +31,6 @@ class Psu {
       pinMode(this->pinRelay, OUTPUT);
       pinMode(this->pinPower, OUTPUT);
       pinMode(this->pinFeedback, INPUT_PULLUP);
-
-      attachInterrupt(digitalPinToInterrupt(this->pinIgnition), this.readIgnition, CHANGE);
-      attachInterrupt(digitalPinToInterrupt(this->pinFeedback), this.readFeedback, CHANGE);
-
-      this->readIgnition();
-      this->readFeedback();
     }
 
     void loop() {
@@ -50,7 +40,7 @@ class Psu {
 
       switch (this->currentState) {
         case psuStateOff:
-          if (this->ignitionSensor) {
+          if (this->readIgnition()) {
             this->currentState = psuStateBooting;
           }
 
@@ -63,7 +53,7 @@ class Psu {
           bootingSince = millis();
 
           do {
-            if (this->feedbackSensor) {
+            if (this->readFeedback()) {
               this->currentState = psuStateOn;
               break;
             }
@@ -81,19 +71,19 @@ class Psu {
           break;
 
         case psuStateOn:
-          if (this->ignitionSensor) {
+          if (this->readIgnition()) {
             break;
           }
 
           ignitionOffSince = millis();
 
           do {
-            if (this->ignitionSensor) {
+            if (this->readIgnition()) {
               break;
             }
           } while (millis() - ignitionOffSince < SHUT_DOWN_DELAY);
 
-          if (!this->ignitionSensor) {
+          if (!this->readIgnition()) {
             this->currentState = psuStateShuttingDown;
           }
 
@@ -105,7 +95,7 @@ class Psu {
           shuttingDownSince = millis();
 
           do {
-            if (!this->feedbackSensor) {
+            if (!this->readFeedback()) {
               break;
             }
           } while (millis() - shuttingDownSince < SHUT_DOWN_TIMEOUT);
