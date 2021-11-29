@@ -1,6 +1,8 @@
 #pragma once
 #include "Faaf.h"
 
+static const char* TAG = "FAAF";
+
 const size_t PACKET_SIZE = 6;
 const unsigned long PACKET_TIMEOUT = 30;
 
@@ -23,14 +25,18 @@ void Faaf::perform() {
   unsigned int targetX;
   unsigned int targetY;
 
+  ESP_LOGD(TAG, "loop");
+
   do {
     if (this->serial->available() <= 0) {
+      ESP_LOGV(TAG, "no data");
       continue;
     }
 
     byte data = this->serial->read();
 
     if ((recvd == 0 && data != 0xa1) || (recvd == 1 && data != 0x00)) {
+      ESP_LOGE(TAG, "corrupted data");
       recvd = 0;
       continue;
     }
@@ -49,10 +55,14 @@ void Faaf::perform() {
     targetX = map(receivedX, 0, 65535, 0, 10000);
     targetY = map(receivedY, 65535, 0, 0, 10000);
 
+    ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
     this->onCoordinates(true, targetX, targetY);
     this->isPressed = true;
   } else if (this->isPressed) {
+    ESP_LOGV(TAG, "onRelease");
     this->onCoordinates(false, 0, 0);
     this->isPressed = false;
+  } else {
+    ESP_LOGV(TAG, "idle");
   }
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Psu.h"
 
+static const char* TAG = "PSU";
+
 #define SHUT_DOWN_TIMEOUT 60000
 #define BOOT_TIMEOUT 60000
 #define SHUT_DOWN_DELAY 60000
@@ -25,6 +27,11 @@ void Psu::perform() {
   unsigned long ignitionOffSince;
   unsigned long shuttingDownSince;
 
+  ESP_LOGD(TAG, "loop");
+  ESP_LOGV(TAG, "currentState %i", this->currentState);
+  ESP_LOGV(TAG, "ignitionState %i", this->readIgnition());
+  ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+
   switch (this->currentState) {
     case psuStateOff:
       if (this->readIgnition()) {
@@ -40,6 +47,8 @@ void Psu::perform() {
       bootingSince = millis();
 
       do {
+        ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+
         if (this->readFeedback()) {
           this->currentState = psuStateOn;
           break;
@@ -67,6 +76,8 @@ void Psu::perform() {
       ignitionOffSince = millis();
 
       do {
+        ESP_LOGV(TAG, "ignitionState %i", this->readIgnition());
+
         if (this->readIgnition()) {
           break;
         }
@@ -86,6 +97,8 @@ void Psu::perform() {
       shuttingDownSince = millis();
 
       do {
+        ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+
         if (!this->readFeedback()) {
           break;
         }

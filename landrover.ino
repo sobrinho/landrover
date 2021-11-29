@@ -40,6 +40,8 @@ void psuTask (void *pvParameters) {
 }
 
 void setup() {
+  Serial.begin(115200);
+
   mouse.begin();
   faaf.begin();
   psu.begin();
