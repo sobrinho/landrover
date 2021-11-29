@@ -1,17 +1,16 @@
-#ifndef FAAF_H
-#define FAAF_H
+#pragma once
+#include <Arduino.h>
+#include <functional>
 
-using faafCallback = void (*)(unsigned int, unsigned int);
+typedef std::function<void(boolean pressed, unsigned int targetX, unsigned int targetY)> FaafCallback;
 
 class Faaf {
-  private:
-    Serial serial;
-    faafCallback onCoordinates;
-
   public:
-    void Faaf(Serial serial, faafCallback onCoordinates);
-    void setup();
+    Faaf(HardwareSerial *serial, FaafCallback onCoordinates);
+    void begin();
     void loop();
-};
 
-#endif
+  private:
+    HardwareSerial *serial;
+    FaafCallback onCoordinates;
+};

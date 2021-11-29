@@ -1,29 +1,26 @@
-#ifndef PSU_H
-#define PSU_H
+#pragma once
+#include <Arduino.h>
 
-enum PsuState = {
+enum PsuState {
   psuStateOff,
   psuStateBooting,
   psuStateOn,
   psuStateShuttingDown
-}
+};
 
 class Psu {
+  public:
+    Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
+    void begin();
+    void loop();
+
   private:
     byte pinIgnition;
     byte pinRelay;
     byte pinPower;
     byte pinFeedback;
-
     PsuState currentState;
 
-    void readIgnition();
-    void readFeedback();
-
-  public:
-    void Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
-    void begin();
-    void loop();
-}
-
-#endif
+    bool readIgnition();
+    bool readFeedback();
+};
