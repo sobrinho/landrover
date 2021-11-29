@@ -2,10 +2,10 @@
 #include "Faaf.h"
 #include "Psu.h"
 
-const byte PIN_IGNITION = 3;
-const byte PIN_RELAY = 14;
-const byte PIN_POWER = 16;
-const byte PIN_FEEDBACK = 7;
+const byte PIN_IGNITION = 18;
+const byte PIN_RELAY = 19;
+const byte PIN_POWER = 21;
+const byte PIN_FEEDBACK = 23;
 
 BleAbsMouse mouse;
 
