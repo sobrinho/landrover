@@ -12,7 +12,7 @@ void faafTask (void *pvParameters) {
   mouse->begin();
 
   Faaf faaf = Faaf(
-    &Serial1,
+    &Serial2,
     [&mouse](boolean isPressed, unsigned int targetX, unsigned int targetY) {
       if (isPressed) {
         mouse.move(targetX, targetY);
