@@ -30,14 +30,12 @@ Psu psu = Psu(
 void faafTask (void *pvParameters) {
   while (true) {
     faaf.perform();
-    vTaskDelay(portMAX_DELAY);
   }
 }
 
 void psuTask (void *pvParameters) {
   while (true) {
     psu.perform();
-    vTaskDelay(portMAX_DELAY);
   }
 }
 

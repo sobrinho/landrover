@@ -44,6 +44,8 @@ void Psu::perform() {
           this->currentState = psuStateOn;
           break;
         }
+
+        vTaskDelay(10 / portTICK_PERIOD_MS);
       } while (millis() - bootingSince < BOOT_TIMEOUT);
 
       if (this->currentState == psuStateOn) {
@@ -68,6 +70,8 @@ void Psu::perform() {
         if (this->readIgnition()) {
           break;
         }
+
+        vTaskDelay(10 / portTICK_PERIOD_MS);
       } while (millis() - ignitionOffSince < SHUT_DOWN_DELAY);
 
       if (!this->readIgnition()) {
@@ -85,6 +89,8 @@ void Psu::perform() {
         if (!this->readFeedback()) {
           break;
         }
+
+        vTaskDelay(10 / portTICK_PERIOD_MS);
       } while (millis() - shuttingDownSince < SHUT_DOWN_TIMEOUT);
 
       digitalWrite(this->pinRelay, LOW);
@@ -92,6 +98,8 @@ void Psu::perform() {
 
       break;
   }
+
+  vTaskDelay(10 / portTICK_PERIOD_MS);
 }
 
 bool Psu::readIgnition() {
