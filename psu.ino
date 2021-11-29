@@ -14,12 +14,10 @@ void faafTask (void *pvParameters) {
   Faaf faaf = Faaf(
     &Serial1,
     [&mouse](boolean isPressed, unsigned int targetX, unsigned int targetY) {
-      if (mouse.isConnected()) {
-        if (isPressed) {
-          mouse.move(targetX, targetY);
-        } else {
-          mouse.release();
-        }
+      if (isPressed) {
+        mouse.move(targetX, targetY);
+      } else {
+        mouse.release();
       }
     }
   );
