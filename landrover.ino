@@ -47,7 +47,7 @@ void setup() {
   xTaskCreate(
     faafTask, // Function that should be called
     "Faaf",   // Name of the task (for debugging)
-    1024,     // Stack size (bytes)
+    2048,     // Stack size (bytes)
     NULL,     // Parameter to pass
     2,        // Task priority
     NULL      // Task handle
@@ -56,7 +56,7 @@ void setup() {
   xTaskCreate(
     psuTask, // Function that should be called
     "PSU",   // Name of the task (for debugging)
-    1024,    // Stack size (bytes)
+    2048,    // Stack size (bytes)
     NULL,    // Parameter to pass
     1,       // Task priority
     NULL     // Task handle
