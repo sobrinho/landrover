@@ -7,38 +7,43 @@ const byte PIN_RELAY = 14;
 const byte PIN_POWER = 16;
 const byte PIN_FEEDBACK = 7;
 
-void faafTask (void *pvParameters) {
-  BleAbsMouse mouse;
-  mouse->begin();
+BleAbsMouse mouse;
 
-  Faaf faaf = Faaf(
-    &Serial2,
-    [&mouse](boolean isPressed, unsigned int targetX, unsigned int targetY) {
-      if (isPressed) {
-        mouse.move(targetX, targetY);
-      } else {
-        mouse.release();
-      }
+Faaf faaf = Faaf(
+  &Serial2,
+  [&mouse](boolean isPressed, unsigned int targetX, unsigned int targetY) {
+    if (isPressed) {
+      mouse.move(targetX, targetY);
+    } else {
+      mouse.release();
     }
-  );
+  }
+);
 
-  faaf.begin();
-  faaf.loop();
+Psu psu = Psu(
+  PIN_IGNITION,
+  PIN_RELAY,
+  PIN_POWER,
+  PIN_FEEDBACK
+);
+
+void faafTask (void *pvParameters) {
+  while (true) {
+    faaf.loop();
+  }
 }
 
 void psuTask (void *pvParameters) {
-  Psu psu = Psu(
-    PIN_IGNITION,
-    PIN_RELAY,
-    PIN_POWER,
-    PIN_FEEDBACK
-  );
-
-  psu.begin();
-  psu.loop();
+  while (true) {
+    psu.loop();
+  }
 }
 
 void setup() {
+  mouse.begin();
+  faaf.begin();
+  psu.begin();
+
   xTaskCreate(
     psuTask, // Function that should be called
     "PSU",   // Name of the task (for debugging)
