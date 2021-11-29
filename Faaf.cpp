@@ -16,6 +16,12 @@ void Faaf::begin() {
   this->serial->begin(19200);
 }
 
+void Faaf::loop() {
+  while (true) {
+    this->perform();
+  }
+}
+
 void Faaf::perform() {
   byte packet[PACKET_SIZE];
   size_t recvd = 0;

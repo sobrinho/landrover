@@ -12,7 +12,7 @@ class Psu {
   public:
     Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
     void begin();
-    void perform();
+    void loop();
 
   private:
     byte pinIgnition;
@@ -21,6 +21,7 @@ class Psu {
     byte pinFeedback;
     PsuState currentState;
 
+    void perform();
     bool readIgnition();
     bool readFeedback();
 };

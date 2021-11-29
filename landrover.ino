@@ -89,15 +89,11 @@ void mouseTask (void *pvParameters) {
 }
 
 void faafTask (void *pvParameters) {
-  while (true) {
-    faaf.perform();
-  }
+  faaf.loop();
 }
 
 void psuTask (void *pvParameters) {
-  while (true) {
-    psu.perform();
-  }
+  psu.loop();
 }
 
 void loop() {

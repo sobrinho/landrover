@@ -14,10 +14,12 @@ class Faaf {
   public:
     Faaf(HardwareSerial *serial, FaafCallback onCoordinates);
     void begin();
-    void perform();
+    void loop();
 
   private:
     HardwareSerial *serial;
     FaafCallback onCoordinates;
     boolean isPressed;
+
+    void perform();
 };
