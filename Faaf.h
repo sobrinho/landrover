@@ -8,7 +8,7 @@ class Faaf {
   public:
     Faaf(HardwareSerial *serial, FaafCallback onCoordinates);
     void begin();
-    void loop();
+    void perform();
 
   private:
     HardwareSerial *serial;

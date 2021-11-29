@@ -20,7 +20,7 @@ void Psu::begin() {
   pinMode(this->pinFeedback, INPUT_PULLUP);
 }
 
-void Psu::loop() {
+void Psu::perform() {
   unsigned long bootingSince;
   unsigned long ignitionOffSince;
   unsigned long shuttingDownSince;

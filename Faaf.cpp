@@ -13,7 +13,7 @@ void Faaf::begin() {
   this->serial->begin(19200);
 }
 
-void Faaf::loop() {
+void Faaf::perform() {
   byte packet[PACKET_SIZE];
   size_t recvd = 0;
   unsigned long receivingSince = millis();
