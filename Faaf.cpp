@@ -24,6 +24,7 @@ void Faaf::perform() {
   unsigned int receivedY;
   unsigned int targetX;
   unsigned int targetY;
+  FaafCoordinates coordinates;
 
   ESP_LOGD(TAG, "loop");
 
@@ -56,12 +57,25 @@ void Faaf::perform() {
     targetX = map(receivedX, 0, 65535, 0, 10000);
     targetY = map(receivedY, 65535, 0, 0, 10000);
 
+    coordinates = FaafCoordinates{
+      true,
+      receivedX,
+      receivedY
+    };
+
     ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
-    this->onCoordinates(true, targetX, targetY);
+    this->onCoordinates(coordinates);
     this->isPressed = true;
   } else if (this->isPressed) {
     ESP_LOGV(TAG, "onRelease");
-    this->onCoordinates(false, 0, 0);
+
+    coordinates = FaafCoordinates{
+      false,
+      0,
+      0
+    };
+
+    this->onCoordinates(coordinates);
     this->isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");

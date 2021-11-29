@@ -2,7 +2,13 @@
 #include <Arduino.h>
 #include <functional>
 
-typedef std::function<void(boolean pressed, unsigned int targetX, unsigned int targetY)> FaafCallback;
+typedef struct {
+  boolean isPressed;
+  unsigned int targetX;
+  unsigned int targetY;
+} FaafCoordinates;
+
+typedef std::function<void(FaafCoordinates coordinates)> FaafCallback;
 
 class Faaf {
   public:

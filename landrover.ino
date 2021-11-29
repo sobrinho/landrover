@@ -11,9 +11,9 @@ BleAbsMouse mouse;
 
 Faaf faaf = Faaf(
   &Serial2,
-  [&mouse](boolean isPressed, unsigned int targetX, unsigned int targetY) {
-    if (isPressed) {
-      mouse.move(targetX, targetY);
+  [&mouse](FaafCoordinates coordinates) {
+    if (coordinates.isPressed) {
+      mouse.move(coordinates.targetX, coordinates.targetY);
     } else {
       mouse.release();
     }
