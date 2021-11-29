@@ -26,7 +26,7 @@ class Psu {
       this->currentState = psuStateOff;
     }
 
-    void setup() {
+    void begin() {
       pinMode(this->pinIgnition, INPUT_PULLUP);
       pinMode(this->pinRelay, OUTPUT);
       pinMode(this->pinPower, OUTPUT);

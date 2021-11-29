@@ -22,7 +22,7 @@ class Psu {
 
   public:
     void Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
-    void setup();
+    void begin();
     void loop();
 }
 
