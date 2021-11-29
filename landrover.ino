@@ -47,21 +47,21 @@ void setup() {
   psu.begin();
 
   xTaskCreate(
-    psuTask, // Function that should be called
-    "PSU",   // Name of the task (for debugging)
-    1024,    // Stack size (bytes)
-    NULL,    // Parameter to pass
-    1,       // Task priority
-    NULL     // Task handle
-  );
-
-  xTaskCreate(
     faafTask, // Function that should be called
     "Faaf",   // Name of the task (for debugging)
     1024,     // Stack size (bytes)
     NULL,     // Parameter to pass
     2,        // Task priority
     NULL      // Task handle
+  );
+
+  xTaskCreate(
+    psuTask, // Function that should be called
+    "PSU",   // Name of the task (for debugging)
+    1024,    // Stack size (bytes)
+    NULL,    // Parameter to pass
+    1,       // Task priority
+    NULL     // Task handle
   );
 
   // TODO: Can we deep sleep while ignition is off?
