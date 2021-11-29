@@ -3,9 +3,9 @@
 
 static const char* TAG = "PSU";
 
-#define SHUT_DOWN_TIMEOUT 60000
-#define BOOT_TIMEOUT 60000
-#define SHUT_DOWN_DELAY 60000
+#define SHUT_DOWN_TIMEOUT 5000
+#define BOOT_TIMEOUT 5000
+#define SHUT_DOWN_DELAY 5000
 
 Psu::Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback) {
   this->pinIgnition = pinIgnition;
