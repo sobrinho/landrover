@@ -13,4 +13,5 @@ class Faaf {
   private:
     HardwareSerial *serial;
     FaafCallback onCoordinates;
+    boolean isPressed;
 };

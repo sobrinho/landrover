@@ -7,6 +7,7 @@ const unsigned long PACKET_TIMEOUT = 30;
 Faaf::Faaf(HardwareSerial *serial, FaafCallback onCoordinates) {
   this->serial = serial;
   this->onCoordinates = onCoordinates;
+  this->isPressed = false;
 }
 
 void Faaf::begin() {
@@ -49,7 +50,9 @@ void Faaf::perform() {
     targetY = map(receivedY, 65535, 0, 0, 10000);
 
     this->onCoordinates(true, targetX, targetY);
-  } else {
+    this->isPressed = true;
+  } else if (this->isPressed) {
     this->onCoordinates(false, 0, 0);
+    this->isPressed = false;
   }
 }
