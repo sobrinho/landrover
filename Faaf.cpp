@@ -13,12 +13,12 @@ Faaf::Faaf(HardwareSerial *serial, FaafCallback onCoordinates) {
 }
 
 void Faaf::begin() {
-  this->serial->begin(19200);
+  serial->begin(19200);
 }
 
 void Faaf::loop() {
   while (true) {
-    this->perform();
+    perform();
   }
 }
 
@@ -35,12 +35,12 @@ void Faaf::perform() {
   ESP_LOGD(TAG, "loop");
 
   do {
-    if (this->serial->available() <= 0) {
+    if (serial->available() <= 0) {
       ESP_LOGV(TAG, "no data");
       continue;
     }
 
-    byte data = this->serial->read();
+    byte data = serial->read();
 
     if ((recvd == 0 && data != 0xa1) || (recvd == 1 && data != 0x00)) {
       ESP_LOGE(TAG, "corrupted data");
@@ -70,9 +70,9 @@ void Faaf::perform() {
     };
 
     ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
-    this->onCoordinates(coordinates);
-    this->isPressed = true;
-  } else if (this->isPressed) {
+    onCoordinates(coordinates);
+    isPressed = true;
+  } else if (isPressed) {
     ESP_LOGV(TAG, "onRelease");
 
     coordinates = FaafCoordinates{
@@ -81,8 +81,8 @@ void Faaf::perform() {
       0
     };
 
-    this->onCoordinates(coordinates);
-    this->isPressed = false;
+    onCoordinates(coordinates);
+    isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
   }
