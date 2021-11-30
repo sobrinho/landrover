@@ -65,8 +65,8 @@ void Faaf::perform() {
 
     coordinates = FaafCoordinates{
       true,
-      receivedX,
-      receivedY
+      targetX,
+      targetY
     };
 
     ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
