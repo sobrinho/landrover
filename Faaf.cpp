@@ -19,11 +19,11 @@ void Faaf::begin(HardwareSerial* serial, FaafCallback onCoordinates) {
 
 void Faaf::taskServer(void* pvParameters) {
   while (true) {
-    perform();
+    _perform();
   }
 }
 
-void Faaf::perform() {
+void Faaf::_perform() {
   byte packet[PACKET_SIZE];
   size_t recvd = 0;
   unsigned long receivingSince = millis();

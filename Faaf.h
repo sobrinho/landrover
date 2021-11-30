@@ -20,5 +20,5 @@ class Faaf {
     static FaafCallback _onCoordinates;
     static boolean _isPressed;
 
-    static void perform();
+    static void _perform();
 };
