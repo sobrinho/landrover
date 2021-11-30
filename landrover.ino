@@ -45,30 +45,30 @@ void setup() {
   psu.begin();
 
   xTaskCreate(
-    mouseTask, // Function that should be called
-    "Mouse",   // Name of the task (for debugging)
-    2048,      // Stack size (bytes)
-    NULL,      // Parameter to pass
-    3,         // Task priority
-    NULL       // Task handle
+    mouseTask,
+    "Mouse",
+    2048,
+    (void*) &mouse,
+    3,
+    NULL
   );
 
   xTaskCreate(
-    faafTask, // Function that should be called
-    "Faaf",   // Name of the task (for debugging)
-    2048,     // Stack size (bytes)
-    NULL,     // Parameter to pass
-    2,        // Task priority
-    NULL      // Task handle
+    faafTask,
+    "Faaf",
+    2048,
+    (void*) &faaf,
+    2,
+    NULL
   );
 
   xTaskCreate(
-    psuTask, // Function that should be called
-    "PSU",   // Name of the task (for debugging)
-    2048,    // Stack size (bytes)
-    NULL,    // Parameter to pass
-    1,       // Task priority
-    NULL     // Task handle
+    psuTask,
+    "PSU",
+    2048,
+    (void*) &psu,
+    1,
+    NULL
   );
 
   // TODO: Can we deep sleep while ignition is off?
@@ -76,24 +76,31 @@ void setup() {
   // esp_deep_sleep_start();
 }
 
-void mouseTask (void *pvParameters) {
-  FaafCoordinates *coordinates;
+void mouseTask (void* pvParameters) {
+  BleAbsMouse* mouse = (BleAbsMouse*) pvParameters;
+  FaafCoordinates* coordinates;
 
-  if (xQueueReceive(coordinatesQueue, &coordinates, (TickType_t) 0)) {
+  while (true) {
+    xQueueReceive(coordinatesQueue, &coordinates, portMAX_DELAY);
+
     if (coordinates->isPressed) {
-      mouse.move(coordinates->targetX, coordinates->targetY);
+      mouse->move(coordinates->targetX, coordinates->targetY);
     } else {
-      mouse.release();
+      mouse->release();
     }
   }
 }
 
-void faafTask (void *pvParameters) {
-  faaf.loop();
+void faafTask (void* pvParameters) {
+  Faaf* faaf = (Faaf*) pvParameters;
+
+  faaf->loop();
 }
 
-void psuTask (void *pvParameters) {
-  psu.loop();
+void psuTask (void* pvParameters) {
+  Psu* psu = (Psu*) pvParameters;
+
+  psu->loop();
 }
 
 void loop() {
