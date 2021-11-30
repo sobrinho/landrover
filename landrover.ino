@@ -13,13 +13,6 @@ QueueHandle_t coordinatesQueue;
 
 BleAbsMouse mouse;
 
-Faaf faaf = Faaf(
-  &Serial2,
-  [](FaafCoordinates coordinates) {
-    xQueueSend(coordinatesQueue, &coordinates, (TickType_t) 0);
-  }
-);
-
 void setup() {
   Serial.begin(115200);
 
@@ -34,7 +27,14 @@ void setup() {
   }
 
   mouse.begin();
-  faaf.begin();
+
+  Faaf::begin(
+    &Serial2,
+    [](FaafCoordinates coordinates) {
+      xQueueSend(coordinatesQueue, &coordinates, (TickType_t) 0);
+    }
+  );
+
   Psu::begin(
     PIN_IGNITION,
     PIN_RELAY,
@@ -52,10 +52,10 @@ void setup() {
   );
 
   xTaskCreate(
-    faafTask,
+    Faaf::taskServer,
     "Faaf",
     2048,
-    (void*) &faaf,
+    NULL,
     2,
     NULL
   );
@@ -87,12 +87,6 @@ void mouseTask (void* pvParameters) {
       mouse->release();
     }
   }
-}
-
-void faafTask (void* pvParameters) {
-  Faaf* faaf = (Faaf*) pvParameters;
-
-  faaf->task();
 }
 
 void loop() {

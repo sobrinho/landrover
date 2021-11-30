@@ -12,14 +12,13 @@ typedef std::function<void(FaafCoordinates coordinates)> FaafCallback;
 
 class Faaf {
   public:
-    Faaf(HardwareSerial* serial, FaafCallback onCoordinates);
-    void begin();
-    void task();
+    static void begin(HardwareSerial* serial, FaafCallback onCoordinates);
+    static void taskServer(void* pvParameters);
 
   private:
-    HardwareSerial* serial;
-    FaafCallback onCoordinates;
-    boolean isPressed;
+    static HardwareSerial* _serial;
+    static FaafCallback _onCoordinates;
+    static boolean _isPressed;
 
-    void perform();
+    static void perform();
 };

@@ -6,17 +6,18 @@ static const char* TAG = "FAAF";
 const size_t PACKET_SIZE = 6;
 const unsigned long PACKET_TIMEOUT = 30;
 
-Faaf::Faaf(HardwareSerial* serial, FaafCallback onCoordinates) {
-  this->serial = serial;
-  this->onCoordinates = onCoordinates;
-  this->isPressed = false;
+HardwareSerial* Faaf::_serial = nullptr;
+FaafCallback Faaf::_onCoordinates = nullptr;
+boolean Faaf::_isPressed = false;
+
+void Faaf::begin(HardwareSerial* serial, FaafCallback onCoordinates) {
+  _serial = serial;
+  _onCoordinates = onCoordinates;
+
+  _serial->begin(19200);
 }
 
-void Faaf::begin() {
-  serial->begin(19200);
-}
-
-void Faaf::task() {
+void Faaf::taskServer(void* pvParameters) {
   while (true) {
     perform();
   }
@@ -35,12 +36,12 @@ void Faaf::perform() {
   ESP_LOGD(TAG, "loop");
 
   do {
-    if (serial->available() <= 0) {
+    if (_serial->available() <= 0) {
       ESP_LOGV(TAG, "no data");
       continue;
     }
 
-    byte data = serial->read();
+    byte data = _serial->read();
 
     if ((recvd == 0 && data != 0xa1) || (recvd == 1 && data != 0x00)) {
       ESP_LOGE(TAG, "corrupted data");
@@ -70,9 +71,9 @@ void Faaf::perform() {
     };
 
     ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
-    onCoordinates(coordinates);
-    isPressed = true;
-  } else if (isPressed) {
+    _onCoordinates(coordinates);
+    _isPressed = true;
+  } else if (_isPressed) {
     coordinates = FaafCoordinates{
       false,
       0,
@@ -80,8 +81,8 @@ void Faaf::perform() {
     };
 
     ESP_LOGV(TAG, "onRelease");
-    onCoordinates(coordinates);
-    isPressed = false;
+    _onCoordinates(coordinates);
+    _isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
   }
