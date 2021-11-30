@@ -6,7 +6,7 @@ static const char* TAG = "FAAF";
 const size_t PACKET_SIZE = 6;
 const unsigned long PACKET_TIMEOUT = 30;
 
-Faaf::Faaf(HardwareSerial *serial, FaafCallback onCoordinates) {
+Faaf::Faaf(HardwareSerial* serial, FaafCallback onCoordinates) {
   this->serial = serial;
   this->onCoordinates = onCoordinates;
   this->isPressed = false;
@@ -73,14 +73,13 @@ void Faaf::perform() {
     onCoordinates(coordinates);
     isPressed = true;
   } else if (isPressed) {
-    ESP_LOGV(TAG, "onRelease");
-
     coordinates = FaafCoordinates{
       false,
       0,
       0
     };
 
+    ESP_LOGV(TAG, "onRelease");
     onCoordinates(coordinates);
     isPressed = false;
   } else {

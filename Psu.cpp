@@ -1,13 +1,13 @@
 #pragma once
 #include "Psu.h"
 
-static const char* TAG = "PSU";
-
 #define SHUT_DOWN_TIMEOUT 5000
 #define BOOT_TIMEOUT 5000
 #define SHUT_DOWN_DELAY 5000
 
-Psu *instance;
+static const char* TAG = "PSU";
+
+Psu* instance;
 
 Psu::Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback) {
   this->pinIgnition = pinIgnition;
