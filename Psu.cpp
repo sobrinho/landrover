@@ -7,24 +7,36 @@ static const char* TAG = "PSU";
 #define BOOT_TIMEOUT 5000
 #define SHUT_DOWN_DELAY 5000
 
+Psu *instance;
+
 Psu::Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback) {
   this->pinIgnition = pinIgnition;
   this->pinRelay = pinRelay;
   this->pinPower = pinPower;
   this->pinFeedback = pinFeedback;
-  this->currentState = psuStateOff;
+  this->ignitionState = false;
+  this->feedbackState = false;
+  this->psuState = psuStateOff;
+
+  instance = this;
 }
 
 void Psu::begin() {
-  pinMode(this->pinIgnition, INPUT_PULLUP);
-  pinMode(this->pinRelay, OUTPUT);
-  pinMode(this->pinPower, OUTPUT);
-  pinMode(this->pinFeedback, INPUT_PULLUP);
+  pinMode(pinIgnition, INPUT_PULLUP);
+  pinMode(pinRelay, OUTPUT);
+  pinMode(pinPower, OUTPUT);
+  pinMode(pinFeedback, INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(pinIgnition), readIgnitionISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(pinFeedback), readFeedbackISR, CHANGE);
+
+  readIgnition();
+  readFeedback();
 }
 
 void Psu::loop() {
   while (true) {
-    this->perform();
+    perform();
   }
 }
 
@@ -34,97 +46,105 @@ void Psu::perform() {
   unsigned long shuttingDownSince;
 
   ESP_LOGD(TAG, "loop");
-  ESP_LOGV(TAG, "currentState %i", this->currentState);
-  ESP_LOGV(TAG, "ignitionState %i", this->readIgnition());
-  ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+  ESP_LOGV(TAG, "ignitionState %i", ignitionState);
+  ESP_LOGV(TAG, "feedbackState %i", feedbackState);
+  ESP_LOGD(TAG, "psuState %i", psuState);
 
-  switch (this->currentState) {
+  switch (psuState) {
     case psuStateOff:
-      if (this->readIgnition()) {
-        this->currentState = psuStateBooting;
+      if (ignitionState) {
+        psuState = psuStateBooting;
       }
 
       break;
 
     case psuStateBooting:
-      digitalWrite(this->pinRelay, HIGH);
-      digitalWrite(this->pinPower, HIGH);
+      digitalWrite(pinRelay, HIGH);
+      digitalWrite(pinPower, HIGH);
 
       bootingSince = millis();
 
       do {
-        ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+        ESP_LOGV(TAG, "feedbackState %i", feedbackState);
 
-        if (this->readFeedback()) {
-          this->currentState = psuStateOn;
+        if (feedbackState) {
+          psuState = psuStateOn;
           break;
         }
 
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
       } while (millis() - bootingSince < BOOT_TIMEOUT);
 
-      if (this->currentState == psuStateOn) {
+      if (psuState == psuStateOn) {
         break;
       }
 
-      digitalWrite(this->pinRelay, LOW);
+      digitalWrite(pinRelay, LOW);
       digitalWrite(pinPower, LOW);
 
-      this->currentState = psuStateOff;
+      psuState = psuStateOff;
 
       break;
 
     case psuStateOn:
-      if (this->readIgnition()) {
+      if (ignitionState) {
         break;
       }
 
       ignitionOffSince = millis();
 
       do {
-        ESP_LOGV(TAG, "ignitionState %i", this->readIgnition());
+        ESP_LOGV(TAG, "ignitionState %i", ignitionState);
 
-        if (this->readIgnition()) {
+        if (ignitionState) {
           break;
         }
 
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
       } while (millis() - ignitionOffSince < SHUT_DOWN_DELAY);
 
-      if (!this->readIgnition()) {
-        this->currentState = psuStateShuttingDown;
+      if (!ignitionState) {
+        psuState = psuStateShuttingDown;
       }
 
       break;
 
     case psuStateShuttingDown:
-      digitalWrite(this->pinPower, LOW);
+      digitalWrite(pinPower, LOW);
 
       shuttingDownSince = millis();
 
       do {
-        ESP_LOGV(TAG, "feedbackState %i", this->readFeedback());
+        ESP_LOGV(TAG, "feedbackState %i", feedbackState);
 
-        if (!this->readFeedback()) {
+        if (!feedbackState) {
           break;
         }
 
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
       } while (millis() - shuttingDownSince < SHUT_DOWN_TIMEOUT);
 
-      digitalWrite(this->pinRelay, LOW);
-      this->currentState = psuStateOff;
+      digitalWrite(pinRelay, LOW);
+      psuState = psuStateOff;
 
       break;
   }
 
-  vTaskDelay(10 / portTICK_PERIOD_MS);
+  vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
-bool Psu::readIgnition() {
-  return digitalRead(this->pinIgnition) == LOW;
+void Psu::readIgnition() {
+  ignitionState = digitalRead(pinIgnition) == LOW;
 }
 
-bool Psu::readFeedback() {
-  return digitalRead(this->pinFeedback) == LOW;
+void Psu::readFeedback() {
+  feedbackState = digitalRead(pinFeedback) == LOW;
+}
+
+void Psu::readIgnitionISR() {
+  instance->readIgnition();
+}
+
+void Psu::readFeedbackISR() {
+  instance->readFeedback();
 }

@@ -19,9 +19,14 @@ class Psu {
     byte pinRelay;
     byte pinPower;
     byte pinFeedback;
-    PsuState currentState;
+    PsuState psuState;
+    volatile boolean ignitionState;
+    volatile boolean feedbackState;
 
     void perform();
-    bool readIgnition();
-    bool readFeedback();
+    void readIgnition();
+    void readFeedback();
+
+    static void readIgnitionISR();
+    static void readFeedbackISR();
 };
