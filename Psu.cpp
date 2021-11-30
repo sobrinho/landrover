@@ -34,7 +34,7 @@ void Psu::begin() {
   readFeedback();
 }
 
-void Psu::loop() {
+void Psu::task() {
   while (true) {
     perform();
   }

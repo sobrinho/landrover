@@ -94,13 +94,13 @@ void mouseTask (void* pvParameters) {
 void faafTask (void* pvParameters) {
   Faaf* faaf = (Faaf*) pvParameters;
 
-  faaf->loop();
+  faaf->task();
 }
 
 void psuTask (void* pvParameters) {
   Psu* psu = (Psu*) pvParameters;
 
-  psu->loop();
+  psu->task();
 }
 
 void loop() {

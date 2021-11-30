@@ -14,7 +14,7 @@ class Faaf {
   public:
     Faaf(HardwareSerial* serial, FaafCallback onCoordinates);
     void begin();
-    void loop();
+    void task();
 
   private:
     HardwareSerial* serial;

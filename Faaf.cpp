@@ -16,7 +16,7 @@ void Faaf::begin() {
   serial->begin(19200);
 }
 
-void Faaf::loop() {
+void Faaf::task() {
   while (true) {
     perform();
   }
