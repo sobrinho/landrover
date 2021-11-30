@@ -2,7 +2,7 @@
 #include "Faaf.h"
 #include "Psu.h"
 
-static const char* TAG = "LANDROVER";
+static const char* TAG = "MOUSE";
 
 const byte PIN_IGNITION = 18;
 const byte PIN_RELAY = 19;
@@ -16,22 +16,24 @@ BleAbsMouse mouse;
 void setup() {
   Serial.begin(115200);
 
+  mouse.begin();
+
   coordinatesQueue = xQueueCreate(64, sizeof(FaafCoordinates));
 
   if (coordinatesQueue == 0) {
-    ESP_LOGE(TAG, "Error creating coordinatesQueue");
+    ESP_LOGE(TAG, "error creating coordinatesQueue");
 
     while (true) {
       ;
     }
   }
 
-  mouse.begin();
-
   Faaf::begin(
     &Serial2,
     [](FaafCoordinates coordinates) {
-      xQueueSend(coordinatesQueue, &coordinates, (TickType_t) 0);
+      if (xQueueSend(coordinatesQueue, &coordinates, (TickType_t) 0) != pdTRUE) {
+        ESP_LOGE(TAG, "coordinates queue full");
+      }
     }
   );
 
@@ -79,12 +81,18 @@ void mouseTask (void* pvParameters) {
   FaafCoordinates* coordinates;
 
   while (true) {
-    xQueueReceive(coordinatesQueue, &coordinates, portMAX_DELAY);
+    ESP_LOGD(TAG, "loop");
 
-    if (coordinates->isPressed) {
-      mouse->move(coordinates->targetX, coordinates->targetY);
+    if (xQueueReceive(coordinatesQueue, &coordinates, (TickType_t) 100 / portTICK_PERIOD_MS) == pdPASS) {
+      if (coordinates->isPressed) {
+        ESP_LOGV(TAG, "move %i %i", coordinates->targetX, coordinates->targetY);
+        mouse->move(coordinates->targetX, coordinates->targetY);
+      } else {
+        ESP_LOGV(TAG, "release");
+        mouse->release();
+      }
     } else {
-      mouse->release();
+      ESP_LOGV(TAG, "idle");
     }
   }
 }

@@ -47,7 +47,7 @@ void Psu::_perform() {
   ESP_LOGD(TAG, "loop");
   ESP_LOGV(TAG, "ignitionState %i", _ignitionState);
   ESP_LOGV(TAG, "feedbackState %i", _feedbackState);
-  ESP_LOGD(TAG, "psuState %i", _psuState);
+  ESP_LOGV(TAG, "psuState %i", _psuState);
 
   switch (_psuState) {
     case psuStateOff:

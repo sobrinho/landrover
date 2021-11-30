@@ -70,7 +70,7 @@ void Faaf::perform() {
       targetY
     };
 
-    ESP_LOGV(TAG, "onCoordinates %i %i", targetX, targetY);
+    ESP_LOGV(TAG, "coordinates %i %i", targetX, targetY);
     _onCoordinates(coordinates);
     _isPressed = true;
   } else if (_isPressed) {
@@ -80,10 +80,11 @@ void Faaf::perform() {
       0
     };
 
-    ESP_LOGV(TAG, "onRelease");
+    ESP_LOGV(TAG, "release");
     _onCoordinates(coordinates);
     _isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
+    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
