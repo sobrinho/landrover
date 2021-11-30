@@ -11,12 +11,12 @@ const byte PIN_FEEDBACK = 23;
 
 QueueHandle_t coordinatesQueue;
 
-BleAbsMouse mouse;
+BleAbsMouse bleAbsMouse;
 
 void setup() {
   Serial.begin(115200);
 
-  mouse.begin();
+  bleAbsMouse.begin();
 
   coordinatesQueue = xQueueCreate(64, sizeof(FaafCoordinates));
 
@@ -48,7 +48,7 @@ void setup() {
     mouseTask,
     "Mouse",
     2048,
-    (void*) &mouse,
+    (void*) &bleAbsMouse,
     3,
     NULL
   );
@@ -73,7 +73,7 @@ void setup() {
 }
 
 void mouseTask (void* pvParameters) {
-  BleAbsMouse* mouse = (BleAbsMouse*) pvParameters;
+  BleAbsMouse* bleAbsMouse = (BleAbsMouse*) pvParameters;
   FaafCoordinates* coordinates;
 
   while (true) {
@@ -82,10 +82,10 @@ void mouseTask (void* pvParameters) {
     if (xQueueReceive(coordinatesQueue, &coordinates, (TickType_t) 100 / portTICK_PERIOD_MS) == pdPASS) {
       if (coordinates->isPressed) {
         ESP_LOGV(TAG, "coordinates %i %i", coordinates->targetX, coordinates->targetY);
-        mouse->move(coordinates->targetX, coordinates->targetY);
+        bleAbsMouse->move(coordinates->targetX, coordinates->targetY);
       } else {
         ESP_LOGV(TAG, "release");
-        mouse->release();
+        bleAbsMouse->release();
       }
     } else {
       ESP_LOGV(TAG, "idle");
