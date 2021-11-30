@@ -20,13 +20,6 @@ Faaf faaf = Faaf(
   }
 );
 
-Psu psu = Psu(
-  PIN_IGNITION,
-  PIN_RELAY,
-  PIN_POWER,
-  PIN_FEEDBACK
-);
-
 void setup() {
   Serial.begin(115200);
 
@@ -42,7 +35,12 @@ void setup() {
 
   mouse.begin();
   faaf.begin();
-  psu.begin();
+  Psu::begin(
+    PIN_IGNITION,
+    PIN_RELAY,
+    PIN_POWER,
+    PIN_FEEDBACK
+  );
 
   xTaskCreate(
     mouseTask,
@@ -63,10 +61,10 @@ void setup() {
   );
 
   xTaskCreate(
-    psuTask,
+    Psu::taskServer,
     "PSU",
     2048,
-    (void*) &psu,
+    NULL,
     1,
     NULL
   );
@@ -95,12 +93,6 @@ void faafTask (void* pvParameters) {
   Faaf* faaf = (Faaf*) pvParameters;
 
   faaf->task();
-}
-
-void psuTask (void* pvParameters) {
-  Psu* psu = (Psu*) pvParameters;
-
-  psu->task();
 }
 
 void loop() {

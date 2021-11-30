@@ -10,23 +10,19 @@ enum PsuState {
 
 class Psu {
   public:
-    Psu(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
-    void begin();
-    void task();
+    static void begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
+    static void taskServer(void* pvParameters);
 
   private:
-    byte pinIgnition;
-    byte pinRelay;
-    byte pinPower;
-    byte pinFeedback;
-    PsuState psuState;
-    volatile boolean ignitionState;
-    volatile boolean feedbackState;
+    static byte _pinIgnition;
+    static byte _pinRelay;
+    static byte _pinPower;
+    static byte _pinFeedback;
+    volatile static boolean _ignitionState;
+    volatile static boolean _feedbackState;
+    volatile static PsuState _psuState;
 
-    void perform();
-    void readIgnition();
-    void readFeedback();
-
-    static void readIgnitionISR();
-    static void readFeedbackISR();
+    static void _perform();
+    static void _readIgnition();
+    static void _readFeedback();
 };
