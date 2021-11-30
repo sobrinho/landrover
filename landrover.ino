@@ -85,7 +85,7 @@ void mouseTask (void* pvParameters) {
 
     if (xQueueReceive(coordinatesQueue, &coordinates, (TickType_t) 100 / portTICK_PERIOD_MS) == pdPASS) {
       if (coordinates->isPressed) {
-        ESP_LOGV(TAG, "move %i %i", coordinates->targetX, coordinates->targetY);
+        ESP_LOGV(TAG, "coordinates %i %i", coordinates->targetX, coordinates->targetY);
         mouse->move(coordinates->targetX, coordinates->targetY);
       } else {
         ESP_LOGV(TAG, "release");

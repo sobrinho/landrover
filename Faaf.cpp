@@ -44,7 +44,7 @@ void Faaf::_perform() {
     byte data = _serial->read();
 
     if ((recvd == 0 && data != 0xa1) || (recvd == 1 && data != 0x00)) {
-      ESP_LOGE(TAG, "corrupted data");
+      ESP_LOGE(TAG, "corrupted data %i 0x%04X", recvd, data);
       recvd = 0;
       memset(packet, 0, sizeof(packet));
       continue;
