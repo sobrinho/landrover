@@ -4,9 +4,9 @@
 
 static const char* TAG = "MOUSE";
 
-const byte PIN_IGNITION = 18;
-const byte PIN_RELAY = 19;
-const byte PIN_POWER = 21;
+const byte PIN_IGNITION = 15;
+const byte PIN_RELAY = 2;
+const byte PIN_POWER = 2;
 const byte PIN_FEEDBACK = 23;
 
 QueueHandle_t coordinatesQueue;
@@ -70,10 +70,6 @@ void setup() {
     1,
     NULL
   );
-
-  // TODO: Can we deep sleep while ignition is off?
-  // esp_sleep_enable_ext0_wakeup(PIN_IGNITION, 0);
-  // esp_deep_sleep_start();
 }
 
 void mouseTask (void* pvParameters) {

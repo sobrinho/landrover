@@ -1,9 +1,10 @@
 #pragma once
 #include "Psu.h"
 
-#define SHUT_DOWN_TIMEOUT 5000
-#define BOOT_TIMEOUT 5000
-#define SHUT_DOWN_DELAY 5000
+#define SHUT_DOWN_TIMEOUT 2500
+#define BOOT_TIMEOUT 2500
+#define SHUT_DOWN_DELAY 2500
+#define DEEP_SLEEP_TIMEOUT 5000
 
 static const char* TAG = "PSU";
 
@@ -40,6 +41,7 @@ void Psu::taskServer(void* pvParameters) {
 }
 
 void Psu::_perform() {
+  unsigned long offSince;
   unsigned long bootingSince;
   unsigned long ignitionOffSince;
   unsigned long shuttingDownSince;
@@ -51,8 +53,24 @@ void Psu::_perform() {
 
   switch (_psuState) {
     case psuStateOff:
-      if (_ignitionState) {
-        _psuState = psuStateBooting;
+      offSince = millis();
+
+      do {
+        ESP_LOGV(TAG, "ignitionState %i", _ignitionState);
+
+        if (_ignitionState) {
+          _psuState = psuStateBooting;
+          break;
+        }
+
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+      } while (millis() - offSince < DEEP_SLEEP_TIMEOUT);
+
+      if (_psuState == psuStateOff) {
+        ESP_LOGV(TAG, "deep sleep mode");
+
+        esp_sleep_enable_ext0_wakeup((gpio_num_t) _pinIgnition, (int) LOW);
+        esp_deep_sleep_start();
       }
 
       break;
