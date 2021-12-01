@@ -94,6 +94,6 @@ void Faaf::_perform() {
     _isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
