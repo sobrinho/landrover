@@ -12,9 +12,9 @@ byte Power::_pinIgnition = NULL;
 byte Power::_pinRelay = NULL;
 byte Power::_pinPower = NULL;
 byte Power::_pinFeedback = NULL;
+PowerState Power::_powerState = powerStateOff;
 volatile boolean Power::_ignitionState = false;
 volatile boolean Power::_feedbackState = false;
-volatile PowerState Power::_powerState = powerStateOff;
 
 void Power::begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback) {
   _pinIgnition = pinIgnition;

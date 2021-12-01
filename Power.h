@@ -17,9 +17,9 @@ class Power {
     static byte _pinRelay;
     static byte _pinPower;
     static byte _pinFeedback;
+    static PowerState _powerState;
     volatile static boolean _ignitionState;
     volatile static boolean _feedbackState;
-    volatile static PowerState _powerState;
 
     static void _readIgnition();
     static void _readFeedback();
