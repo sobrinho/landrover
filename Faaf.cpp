@@ -15,9 +15,18 @@ void Faaf::begin(HardwareSerial* serial, FaafCallback onCoordinates) {
   _onCoordinates = onCoordinates;
 
   _serial->begin(19200);
+
+  xTaskCreate(
+    Faaf::_taskServer,
+    "Faaf",
+    2048,
+    NULL,
+    2,
+    NULL
+  );
 }
 
-void Faaf::taskServer(void* pvParameters) {
+void Faaf::_taskServer(void* pvParameters) {
   while (true) {
     _perform();
   }

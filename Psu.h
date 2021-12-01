@@ -11,7 +11,6 @@ enum PsuState {
 class Psu {
   public:
     static void begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
-    static void taskServer(void* pvParameters);
 
   private:
     static byte _pinIgnition;
@@ -22,7 +21,8 @@ class Psu {
     volatile static boolean _feedbackState;
     volatile static PsuState _psuState;
 
-    static void _perform();
     static void _readIgnition();
     static void _readFeedback();
+    static void _taskServer(void* pvParameters);
+    static void _perform();
 };

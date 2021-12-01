@@ -32,9 +32,18 @@ void Psu::begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback
 
   _readIgnition();
   _readFeedback();
+
+  xTaskCreate(
+    Psu::_taskServer,
+    "PSU",
+    2048,
+    NULL,
+    1,
+    NULL
+  );
 }
 
-void Psu::taskServer(void* pvParameters) {
+void Psu::_taskServer(void* pvParameters) {
   while (true) {
     _perform();
   }

@@ -1,38 +1,24 @@
-#include <BleAbsMouse.h>
+#include "Mouse.h"
 #include "Faaf.h"
 #include "Psu.h"
-
-static const char* TAG = "MOUSE";
 
 const byte PIN_IGNITION = 15;
 const byte PIN_RELAY = 2;
 const byte PIN_POWER = 2;
 const byte PIN_FEEDBACK = 23;
 
-QueueHandle_t coordinatesQueue;
-
-BleAbsMouse bleAbsMouse;
-
 void setup() {
   Serial.begin(115200);
 
-  bleAbsMouse.begin();
-
-  coordinatesQueue = xQueueCreate(64, sizeof(FaafCoordinates));
-
-  if (coordinatesQueue == 0) {
-    ESP_LOGE(TAG, "error creating coordinatesQueue");
-
-    while (true) {
-      ;
-    }
-  }
+  Mouse::begin();
 
   Faaf::begin(
     &Serial2,
-    [](FaafCoordinates coordinates) {
-      if (xQueueSend(coordinatesQueue, &coordinates, (TickType_t) 0) != pdTRUE) {
-        ESP_LOGE(TAG, "coordinates queue full");
+    [](FaafCoordinates faafCoordinates) {
+      if (faafCoordinates.isPressed) {
+        Mouse::move(faafCoordinates.targetX, faafCoordinates.targetY);
+      } else {
+        Mouse::release();
       }
     }
   );
@@ -43,54 +29,6 @@ void setup() {
     PIN_POWER,
     PIN_FEEDBACK
   );
-
-  xTaskCreate(
-    mouseTask,
-    "Mouse",
-    2048,
-    (void*) &bleAbsMouse,
-    3,
-    NULL
-  );
-
-  xTaskCreate(
-    Faaf::taskServer,
-    "Faaf",
-    2048,
-    NULL,
-    2,
-    NULL
-  );
-
-  xTaskCreate(
-    Psu::taskServer,
-    "PSU",
-    2048,
-    NULL,
-    1,
-    NULL
-  );
-}
-
-void mouseTask (void* pvParameters) {
-  BleAbsMouse* bleAbsMouse = (BleAbsMouse*) pvParameters;
-  FaafCoordinates* coordinates;
-
-  while (true) {
-    ESP_LOGD(TAG, "loop");
-
-    if (xQueueReceive(coordinatesQueue, &coordinates, (TickType_t) 100 / portTICK_PERIOD_MS) == pdPASS) {
-      if (coordinates->isPressed) {
-        ESP_LOGV(TAG, "coordinates %i %i", coordinates->targetX, coordinates->targetY);
-        bleAbsMouse->move(coordinates->targetX, coordinates->targetY);
-      } else {
-        ESP_LOGV(TAG, "release");
-        bleAbsMouse->release();
-      }
-    } else {
-      ESP_LOGV(TAG, "idle");
-    }
-  }
 }
 
 void loop() {
