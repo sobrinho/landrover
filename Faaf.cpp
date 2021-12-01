@@ -6,15 +6,13 @@ static const char* TAG = "FAAF";
 const size_t PACKET_SIZE = 6;
 const unsigned long PACKET_TIMEOUT = 30;
 
-HardwareSerial* Faaf::_serial = nullptr;
+Stream* Faaf::_serial = nullptr;
 FaafCallback Faaf::_onCoordinates = nullptr;
 boolean Faaf::_isPressed = false;
 
-void Faaf::begin(HardwareSerial* serial, FaafCallback onCoordinates) {
+void Faaf::begin(Stream* serial, FaafCallback onCoordinates) {
   _serial = serial;
   _onCoordinates = onCoordinates;
-
-  _serial->begin(19200);
 
   xTaskCreate(
     Faaf::_taskServer,

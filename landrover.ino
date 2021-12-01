@@ -9,6 +9,7 @@ const byte PIN_FEEDBACK = 23;
 
 void setup() {
   Serial.begin(115200);
+  Serial2.begin(19200);
 
   Mouse::begin();
 

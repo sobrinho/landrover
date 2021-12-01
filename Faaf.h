@@ -12,10 +12,10 @@ typedef std::function<void(FaafCoordinates coordinates)> FaafCallback;
 
 class Faaf {
   public:
-    static void begin(HardwareSerial* serial, FaafCallback onCoordinates);
+    static void begin(Stream* serial, FaafCallback onCoordinates);
 
   private:
-    static HardwareSerial* _serial;
+    static Stream* _serial;
     static FaafCallback _onCoordinates;
     static boolean _isPressed;
 
