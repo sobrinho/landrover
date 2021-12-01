@@ -1,12 +1,12 @@
 #pragma once
 #include "Power.h"
 
-#define SHUT_DOWN_TIMEOUT 2500
-#define BOOT_TIMEOUT 2500
-#define SHUT_DOWN_DELAY 2500
-#define DEEP_SLEEP_TIMEOUT 5000
-
 static const char* TAG = "POWER";
+
+const unsigned long SHUT_DOWN_TIMEOUT = 2500;
+const unsigned long BOOT_TIMEOUT = 2500;
+const unsigned long SHUT_DOWN_DELAY = 2500;
+const unsigned long DEEP_SLEEP_TIMEOUT = 5000;
 
 byte Power::_pinIgnition = NULL;
 byte Power::_pinRelay = NULL;
