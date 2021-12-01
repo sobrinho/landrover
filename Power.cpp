@@ -56,9 +56,9 @@ void Power::_perform() {
   unsigned long shuttingDownSince;
 
   ESP_LOGD(TAG, "tick");
+  ESP_LOGV(TAG, "powerState %i", _powerState);
   ESP_LOGV(TAG, "ignitionState %i", _ignitionState);
   ESP_LOGV(TAG, "feedbackState %i", _feedbackState);
-  ESP_LOGV(TAG, "powerState %i", _powerState);
 
   switch (_powerState) {
     case powerStateOff:
