@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# compile.sh
+
+# Usage:
+# $ compile.sh <board> <port>
+# Example: compile.sh esp32:esp32:esp32
+
+board=${1:-"esp32:esp32:esp32"}
+
+arduino-cli compile -b "$board"

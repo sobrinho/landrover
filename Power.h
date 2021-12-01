@@ -1,14 +1,14 @@
 #pragma once
 #include <Arduino.h>
 
-enum PsuState {
-  psuStateOff,
-  psuStateBooting,
-  psuStateOn,
-  psuStateShuttingDown
+enum PowerState {
+  powerStateOff,
+  powerStateBooting,
+  powerStateOn,
+  powerStateShuttingDown
 };
 
-class Psu {
+class Power {
   public:
     static void begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedback);
 
@@ -19,7 +19,7 @@ class Psu {
     static byte _pinFeedback;
     volatile static boolean _ignitionState;
     volatile static boolean _feedbackState;
-    volatile static PsuState _psuState;
+    volatile static PowerState _powerState;
 
     static void _readIgnition();
     static void _readFeedback();

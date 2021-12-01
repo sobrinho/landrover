@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# upload.sh
+
+# Usage:
+# $ upload.sh <board> <port>
+# Example: upload.sh esp32:esp32:esp32 /dev/cu.usbserial-0001
+
+board=${1:-"esp32:esp32:esp32"}
+port=${2:-"/dev/cu.usbserial-0001"}
+
+arduino-cli upload -b "$board" -p "$port"

@@ -1,6 +1,6 @@
 #include "Mouse.h"
 #include "Faaf.h"
-#include "Psu.h"
+#include "Power.h"
 
 const byte PIN_IGNITION = 15;
 const byte PIN_RELAY = 2;
@@ -23,7 +23,7 @@ void setup() {
     }
   );
 
-  Psu::begin(
+  Power::begin(
     PIN_IGNITION,
     PIN_RELAY,
     PIN_POWER,

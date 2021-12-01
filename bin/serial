@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# serial.sh
+
+# Usage:
+# $ connect.sh <device> <baudrate>
+# Example: connect.sh /dev/cu.usbserial 115200
+
+device=${1:-"/dev/cu.usbserial-0001"}
+baudrate=${2:-"115200"}
+
+# Let cat read the device $1 in the background
+awk '{ print strftime("%Y-%m-%d %H:%M:%S"), $0; fflush(); }' "$device" &
+
+# Capture PID of background process so it is possible to terminate it when done
+catPid=$!
+
+# Terminate background read process
+trap "kill $catPid" EXIT
+
+# Set up device
+stty -f "$device" "$baudrate"
+
+# Read commands from user, send them to device $1
+while read cmd
+do
+   echo "$cmd"
+done > $device
