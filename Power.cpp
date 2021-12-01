@@ -76,7 +76,7 @@ void Power::_perform() {
       } while (millis() - offSince < DEEP_SLEEP_TIMEOUT);
 
       if (_powerState == powerStateOff) {
-        ESP_LOGV(TAG, "deep sleep mode");
+        ESP_LOGV(TAG, "sleep");
 
         esp_sleep_enable_ext0_wakeup((gpio_num_t) _pinIgnition, (int) LOW);
         esp_deep_sleep_start();
@@ -156,6 +156,7 @@ void Power::_perform() {
       break;
   }
 
+  ESP_LOGV(TAG, "idle");
   vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
