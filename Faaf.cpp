@@ -42,7 +42,7 @@ void Faaf::_perform() {
   unsigned int targetY;
   FaafCoordinates coordinates;
 
-  ESP_LOGD(TAG, "loop");
+  ESP_LOGD(TAG, "tick");
 
   do {
     if (_serial->available() <= 0) {

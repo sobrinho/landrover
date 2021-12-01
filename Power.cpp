@@ -55,7 +55,7 @@ void Power::_perform() {
   unsigned long ignitionOffSince;
   unsigned long shuttingDownSince;
 
-  ESP_LOGD(TAG, "loop");
+  ESP_LOGD(TAG, "tick");
   ESP_LOGV(TAG, "ignitionState %i", _ignitionState);
   ESP_LOGV(TAG, "feedbackState %i", _feedbackState);
   ESP_LOGV(TAG, "powerState %i", _powerState);
