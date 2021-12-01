@@ -6,7 +6,7 @@ static const char* TAG = "POWER";
 const unsigned long SHUT_DOWN_TIMEOUT = 5000;
 const unsigned long BOOT_TIMEOUT = 5000;
 const unsigned long IGNITION_TIMEOUT = 5000;
-const unsigned long DEEP_SLEEP_TIMEOUT = 10000;
+const unsigned long SLEEP_TIMEOUT = 10000;
 
 byte Power::_pinIgnition = NULL;
 byte Power::_pinRelay = NULL;
@@ -73,7 +73,7 @@ void Power::_perform() {
         }
 
         vTaskDelay(100 / portTICK_PERIOD_MS);
-      } while (millis() - offSince < DEEP_SLEEP_TIMEOUT);
+      } while (millis() - offSince < SLEEP_TIMEOUT);
 
       if (_powerState == powerStateOff) {
         ESP_LOGV(TAG, "sleep");
