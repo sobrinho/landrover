@@ -3,10 +3,10 @@
 
 static const char* TAG = "POWER";
 
-const unsigned long SHUT_DOWN_TIMEOUT = 2500;
-const unsigned long BOOT_TIMEOUT = 2500;
-const unsigned long SHUT_DOWN_DELAY = 2500;
-const unsigned long DEEP_SLEEP_TIMEOUT = 5000;
+const unsigned long SHUT_DOWN_TIMEOUT = 5000;
+const unsigned long BOOT_TIMEOUT = 5000;
+const unsigned long IGNITION_TIMEOUT = 5000;
+const unsigned long DEEP_SLEEP_TIMEOUT = 10000;
 
 byte Power::_pinIgnition = NULL;
 byte Power::_pinRelay = NULL;
@@ -127,7 +127,7 @@ void Power::_perform() {
         }
 
         vTaskDelay(100 / portTICK_PERIOD_MS);
-      } while (millis() - ignitionOffSince < SHUT_DOWN_DELAY);
+      } while (millis() - ignitionOffSince < IGNITION_TIMEOUT);
 
       if (!_ignitionState) {
         _powerState = powerStateShuttingDown;
