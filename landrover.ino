@@ -15,9 +15,9 @@ void setup() {
 
   Faaf::begin(
     &Serial2,
-    [](FaafCoordinates* faafCoordinates) {
-      if (faafCoordinates->isPressed) {
-        Mouse::move(faafCoordinates->targetX, faafCoordinates->targetY);
+    [](const FaafCoordinates& faafCoordinates) {
+      if (faafCoordinates.isPressed) {
+        Mouse::move(faafCoordinates.targetX, faafCoordinates.targetY);
       } else {
         Mouse::release();
       }

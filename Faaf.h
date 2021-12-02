@@ -8,7 +8,7 @@ typedef struct {
   unsigned int targetY;
 } FaafCoordinates;
 
-typedef std::function<void(FaafCoordinates* coordinates)> FaafCallback;
+typedef std::function<void(const FaafCoordinates& coordinates)> FaafCallback;
 
 class Faaf {
   public:

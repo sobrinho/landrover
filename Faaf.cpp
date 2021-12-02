@@ -78,7 +78,7 @@ void Faaf::_perform() {
     };
 
     ESP_LOGV(TAG, "coordinates %i %i", targetX, targetY);
-    _onCoordinates(&coordinates);
+    _onCoordinates(coordinates);
     _isPressed = true;
   } else if (_isPressed) {
     coordinates = FaafCoordinates{
@@ -88,7 +88,7 @@ void Faaf::_perform() {
     };
 
     ESP_LOGV(TAG, "release");
-    _onCoordinates(&coordinates);
+    _onCoordinates(coordinates);
     _isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
