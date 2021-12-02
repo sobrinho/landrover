@@ -57,6 +57,8 @@ void Faaf::_perform() {
       continue;
     }
 
+    ESP_LOGV(TAG, "received data %i 0x%04X", recvd, data);
+
     packet[recvd++] = data;
 
     if (recvd == PACKET_SIZE) {
