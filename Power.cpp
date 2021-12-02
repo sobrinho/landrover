@@ -33,13 +33,14 @@ void Power::begin(byte pinIgnition, byte pinRelay, byte pinPower, byte pinFeedba
   _readIgnition();
   _readFeedback();
 
-  xTaskCreate(
+  xTaskCreatePinnedToCore(
     Power::_taskServer,
     "POWER",
     2048,
     NULL,
-    1,
-    NULL
+    0,
+    NULL,
+    0
   );
 }
 
@@ -157,7 +158,7 @@ void Power::_perform() {
   }
 
   ESP_LOGV(TAG, "idle");
-  vTaskDelay(1000 / portTICK_PERIOD_MS);
+  vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
 void Power::_readIgnition() {

@@ -14,13 +14,14 @@ void Faaf::begin(Stream* serial, FaafCallback onCoordinates) {
   _serial = serial;
   _onCoordinates = onCoordinates;
 
-  xTaskCreate(
+  xTaskCreatePinnedToCore(
     Faaf::_taskServer,
     "Faaf",
     2048,
     NULL,
-    2,
-    NULL
+    0,
+    NULL,
+    1
   );
 }
 
@@ -94,6 +95,7 @@ void Faaf::_perform() {
     _isPressed = false;
   } else {
     ESP_LOGV(TAG, "idle");
-    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
+
+  vTaskDelay(10 / portTICK_PERIOD_MS);
 }
